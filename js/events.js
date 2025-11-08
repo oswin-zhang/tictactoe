@@ -13,10 +13,25 @@ const resetBtnEl = document.getElementById('resetBtn');
 
 let aiThinking = false; // 防止重复点击期间 AI 仍在计算
 
+// 音效相关：获取音频元素
+const bgAudio = document.getElementById('bgAudio');
+const placeAudio = document.getElementById('placeAudio');
+const winAudio = document.getElementById('winAudio');
+
+// 初始化事件绑定，并自动播放背景音乐（需用户首次交互后触发）
 export function initEvents() {
   modeSelectEl.addEventListener('change', onModeChange);
   difficultySelectEl.addEventListener('change', onDifficultyChange);
   resetBtnEl.addEventListener('click', onReset);
+  // 用户首次点击页面时，自动播放背景音乐（移动端需交互）
+  document.body.addEventListener('click', tryPlayBgAudio, { once: true });
+}
+
+function tryPlayBgAudio() {
+  if (bgAudio) {
+    bgAudio.volume = 0.25;
+    bgAudio.play().catch(() => {}); // 某些浏览器需用户交互
+  }
 }
 
 function onModeChange() {
@@ -40,16 +55,24 @@ function onReset() {
   renderBoard(handleCellClick);
   renderStatus();
   renderModeControls();
+  // 重置时停止胜利音效，重置落子音效
+  if (winAudio) winAudio.pause();
+  if (winAudio) winAudio.currentTime = 0;
 }
 
 // 玩家点击格子
 function handleCellClick(index) {
-  if (aiThinking) return; // AI 正在思考则忽略
+  if (aiThinking) return;
   if (state.gameStatus !== 'playing') return;
-  if (state.board[index] !== null) return; // 已被占用
+  if (state.board[index] !== null) return;
 
   // 玩家落子
   state.board = applyMove(state.board, index, state.currentPlayer);
+  // 播放落子音效
+  if (placeAudio) {
+    placeAudio.currentTime = 0;
+    placeAudio.play().catch(() => {});
+  }
   postMoveUpdate();
 
   // 若是人机模式且游戏未结束，则 AI 行动
@@ -64,9 +87,14 @@ function postMoveUpdate() {
     state.gameStatus = 'win';
     state.winner = winner;
     state.scores[winner]++;
-    renderBoard(() => {}); // 禁止继续点击
+    renderBoard(() => {});
     renderStatus();
     renderResult(winner, line);
+    // 播放胜利音效
+    if (winAudio) {
+      winAudio.currentTime = 0;
+      winAudio.play().catch(() => {});
+    }
     return;
   }
   if (checkDraw(state.board)) {
@@ -75,7 +103,6 @@ function postMoveUpdate() {
     renderResult(null, []);
     return;
   }
-  // 切换玩家
   state.currentPlayer = togglePlayer(state.currentPlayer);
   renderBoard(handleCellClick);
   renderStatus();
