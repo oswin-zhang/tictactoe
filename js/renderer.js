@@ -21,6 +21,9 @@ export function renderBoard(onCellClick) {
     if (value) {
       btn.textContent = value;
       btn.classList.add('filled', 'scale-pop');
+      // 根据 X/O 添加不同颜色类
+      if (value === 'X') btn.classList.add('x');
+      if (value === 'O') btn.classList.add('o');
     }
     if (state.gameStatus !== 'playing' || value) {
       // 游戏结束或已被占用：禁用点击

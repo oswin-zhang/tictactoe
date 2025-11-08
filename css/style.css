@@ -91,6 +91,16 @@ select:focus, .btn:focus { outline: 2px solid var(--accent); outline-offset: 2px
   transition: transform .25s, background .25s, box-shadow .25s;
   user-select: none; /* 禁止选中文本 */
 }
+
+/* X/O 专属颜色增强体验 */
+.cell.x {
+  color: #1976d2; /* 蓝色，代表 X */
+  text-shadow: 0 2px 8px rgba(25,118,210,0.12);
+}
+.cell.o {
+    color: #ff7f50; /* 橘色，代表 O */
+    text-shadow: 0 2px 8px rgba(255,127,80,0.12);
+}
 .cell:hover { transform: translateY(-4px); box-shadow: 0 6px 16px rgba(0,0,0,.15); }
 .cell:active { transform: scale(.95); }
 .cell.filled { cursor: not-allowed; opacity: .9; }
