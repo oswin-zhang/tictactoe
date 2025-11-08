@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- <!DOCTYPE html> 声明 HTML5 文档类型，使浏览器以标准模式渲染 -->
+  <meta charset="UTF-8" /> <!-- 指定网页使用的字符编码，UTF-8 支持中文 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- 让页面在移动端设备宽度下自适应缩放 -->
+  <title>井字棋 Tic Tac Toe</title> <!-- 浏览器标签页标题 -->
+  <link rel="stylesheet" href="./css/style.css" /> <!-- 引入主样式文件 -->
+  <link rel="stylesheet" href="./css/animations.css" /> <!-- 引入动画样式文件，可分离维护 -->
+</head>
+<body>
+  <!-- 页面整体背景使用渐变，主体内容居中显示 -->
+  <div class="app-shell">
+    <header class="app-header">
+      <h1>井字棋游戏 (Tic Tac Toe)</h1>
+      <p class="subtitle">支持本地对战 / 人机对战，多难度 AI，移动端适配</p>
+    </header>
+
+    <!-- 控制面板: 模式选择 / 难度选择 / 重置 / 回合信息 -->
+    <section class="control-panel" aria-label="游戏控制面板">
+      <!-- 使用 <label> + <select> 形成可访问的表单控件 -->
+      <div class="field-group">
+        <label for="modeSelect">模式：</label>
+        <select id="modeSelect" aria-label="选择游戏模式">
+          <option value="pvp">玩家 vs 玩家</option>
+          <option value="pve">玩家 vs AI</option>
+        </select>
+      </div>
+      <div class="field-group" id="difficultyGroup" style="display:none;">
+        <label for="difficultySelect">AI 难度：</label>
+        <select id="difficultySelect" aria-label="选择 AI 难度">
+          <option value="easy">低级 (随机)</option>
+          <option value="medium">中级 (启发式)</option>
+          <option value="hard">高级 (Minimax)</option>
+        </select>
+      </div>
+      <div class="status" id="turnIndicator" aria-live="polite">当前玩家：X</div>
+      <button id="resetBtn" class="btn" type="button" aria-label="重置游戏">重置</button>
+    </section>
+
+    <!-- 棋盘区域：使用 3x3 Grid；每个格子用 button 保证可访问性与键盘操作 -->
+    <main class="board" id="board" aria-label="井字棋棋盘" role="grid">
+      <!-- 9 个格子将由 JS 动态渲染，也可以预先写死；动态方式更灵活 -->
+    </main>
+
+    <!-- 结果提示 / 胜利 / 平局 -->
+    <section class="result-panel" id="resultPanel" aria-live="assertive" aria-label="游戏结果" hidden>
+      <div id="resultMessage"></div>
+    </section>
+
+    <!-- 额外扩展：比分 / 历史记录（可后续实现） -->
+    <aside class="extras" aria-label="扩展功能区">
+      <div class="scoreboard" id="scoreboard">
+        <h2>比分 (待实现)</h2>
+        <p>X: <span id="scoreX">0</span> | O: <span id="scoreO">0</span></p>
+      </div>
+    </aside>
+
+    <footer class="app-footer">
+      <p>使用 GitHub Copilot 辅助开发 — 保留注释以展示学习过程</p>
+    </footer>
+  </div>
+
+  <!-- 业务逻辑脚本：模块化拆分，避免所有代码堆在一个文件中 -->
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

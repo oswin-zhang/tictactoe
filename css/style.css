@@ -1,0 +1,129 @@
+/* style.css 主样式文件
+ * 样式文件用途：用于描述 HTML 元素的视觉表现（颜色、布局、字体等）
+ * CSS 基础概念：选择器(selector)选中元素；属性(property)赋值；响应式使用弹性布局或媒体查询。
+ */
+
+:root { /* CSS 变量：集中管理主题色，便于统一调整 */
+  --bg-gradient: linear-gradient(135deg,#1e3c72,#2a5298);
+  --panel-bg: #ffffff;
+  --panel-shadow: 0 8px 24px rgba(0,0,0,.15);
+  --accent: #ff7f50;
+  --accent-hover: #ff956f;
+  --grid-border: #d0d7de;
+  --win-highlight: #4caf50;
+  --font-stack: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+* { box-sizing: border-box; } /* 统一盒模型计算方式，避免内边距影响宽度 */
+body {
+  margin: 0;
+  font-family: var(--font-stack);
+  background: var(--bg-gradient);
+  color: #222;
+  -webkit-font-smoothing: antialiased; /* 字体渲染优化 */
+}
+
+.app-shell { /* 页面主容器：限制最大宽度并居中 */
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+}
+
+.app-header { text-align: center; color: #fff; }
+.app-header h1 { margin: 0 0 8px; font-size: clamp(1.8rem,4vw,2.6rem); }
+.subtitle { margin: 0; opacity: 0.85; }
+
+.control-panel { /* 顶部控制区：使用 flex 布局 */
+  display: flex;
+  flex-wrap: wrap; /* 多行换行以适配小屏 */
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-bg);
+  padding: 16px 20px;
+  border-radius: 16px;
+  box-shadow: var(--panel-shadow);
+  margin: 24px auto;
+}
+.field-group { display: flex; gap: 6px; align-items: center; }
+.field-group label { font-weight: 600; }
+
+select, .btn { /* 表单控件基础样式 */
+  padding: 8px 12px;
+  border: 1px solid #c1c7cd;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #fff;
+  cursor: pointer;
+  transition: background .25s, box-shadow .25s;
+}
+select:focus, .btn:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { background: var(--accent); color: #fff; border: none; }
+.btn:hover { background: var(--accent-hover); }
+
+.status { font-weight: 600; padding: 4px 12px; }
+
+.board { /* 棋盘使用 CSS Grid：3 列布局 */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(80px, 1fr)); /* repeat 指定重复列；minmax 设置最小/最大尺寸 */
+  gap: 10px; /* 格子之间的间距 */
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 24px;
+  padding: 10px;
+  background: var(--panel-bg);
+  border-radius: 20px;
+  box-shadow: var(--panel-shadow);
+}
+
+.cell { /* 每个格子使用 button 增强可访问性 */
+  position: relative; /* 允许内部使用绝对定位装饰 */
+  aspect-ratio: 1 / 1; /* 保持方形：宽高比 1:1 */
+  font-size: clamp(2.2rem, 8vw, 4.2rem); /* clamp 实现响应式字体：最小 / 首选 / 最大 */
+  font-weight: 600;
+  border: 2px solid var(--grid-border);
+  border-radius: 18px;
+  background: #f9fbfc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .25s, background .25s, box-shadow .25s;
+  user-select: none; /* 禁止选中文本 */
+}
+.cell:hover { transform: translateY(-4px); box-shadow: 0 6px 16px rgba(0,0,0,.15); }
+.cell:active { transform: scale(.95); }
+.cell.filled { cursor: not-allowed; opacity: .9; }
+.cell.win { background: var(--win-highlight); color: #fff; animation: pulseWin 1s infinite; }
+
+.result-panel { /* 显示胜负结果 */
+  text-align: center;
+  background: var(--panel-bg);
+  max-width: 420px;
+  margin: 0 auto 28px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  box-shadow: var(--panel-shadow);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.extras { /* 扩展功能侧区，可换行至底部 */
+  max-width: 420px;
+  margin: 0 auto;
+  background: var(--panel-bg);
+  padding: 14px 18px;
+  border-radius: 16px;
+  box-shadow: var(--panel-shadow);
+}
+.scoreboard h2 { font-size: 1.1rem; margin: 0 0 8px; }
+
+.app-footer { margin-top: 48px; text-align: center; color: #fff; font-size: .9rem; opacity: .85; }
+
+/* 媒体查询：当屏幕宽度 <= 520px 时调整布局，提升移动端体验 */
+@media (max-width: 520px) {
+  .control-panel { justify-content: flex-start; }
+  .board { gap: 8px; padding: 8px; }
+  .cell { border-radius: 14px; }
+  .result-panel, .extras { padding: 14px 16px; }
+}
